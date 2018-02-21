@@ -1,4 +1,5 @@
 import React from 'react'
+import Filter from './Filter'
 import { voting } from './../reducers/anecdoteReducer'
 import { notify, clear } from './../reducers/notificationReducer'
 
@@ -9,8 +10,10 @@ class AnecdoteList extends React.Component {
     return (
       <div>
         <h2>Anecdotes</h2>
-        {anecdotes.sort((a, b) => b.votes - a.votes).map(anecdote =>
-          <div key={anecdote.id}>
+        <Filter store={this.props.store} />
+        {anecdotes.sort((a, b) => b.votes - a.votes).map(anecdote => anecdote.content.includes(store.getState().filter)
+          // Filter string exists in content: show anecdote
+          ? <div key={anecdote.id}>
             <div>
               {anecdote.content}
             </div>
@@ -25,6 +28,8 @@ class AnecdoteList extends React.Component {
               </button>
             </div>
           </div>
+          // Filter string missing in content: hide anecdote
+          : <div></div>
         )}
       </div>
     )

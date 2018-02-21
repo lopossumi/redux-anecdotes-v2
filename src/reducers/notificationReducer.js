@@ -2,7 +2,7 @@ const notificationReducer = (state = '', action) => {
   switch (action.type) {
     case 'SET_NOTIFICATION':
       return action.message
-    case 'CLEAR':
+    case 'CLEAR_NOTIFICATION':
       return ''
     default:
       return state
@@ -18,7 +18,7 @@ export const notify = (message) => {
 
 export const clear = () => {
   return {
-    type: 'CLEAR'
+    type: 'CLEAR_NOTIFICATION'
   }
 }
 
