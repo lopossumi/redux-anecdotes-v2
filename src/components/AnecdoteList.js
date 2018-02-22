@@ -7,14 +7,13 @@ import { connect } from 'react-redux'
 class AnecdoteList extends React.Component {
 
   render() {
-    const anecdotes = this.props.anecdotes
+    //const anecdotes = this.props.anecdotes
     return (
       <div>
         <h2>Anecdotes</h2>
         <Filter />
-        {anecdotes.sort((a, b) => b.votes - a.votes).map(anecdote => anecdote.content.includes(this.props.filter)
-          // Filter string exists in content: show anecdote
-          ? <div key={anecdote.id}>
+        {this.props.visibleAnecdotes.map(anecdote =>
+          <div key={anecdote.id}>
             <div>
               {anecdote.content}
             </div>
@@ -29,16 +28,23 @@ class AnecdoteList extends React.Component {
               </button>
             </div>
           </div>
-          // Filter string missing in content: hide anecdote
-          : <div></div>
         )}
       </div>
     )
   }
 }
 
+// {anecdotes.sort((a, b) => b.votes - a.votes).map(anecdote => anecdote.content.includes(this.props.filter)
+
+const anecdotesToShow = (anecdotes, filter) => {
+  return anecdotes
+    .sort((a, b) => b.votes - a.votes)
+    .map(a => a.content.includes(filter))
+}
+
 const mapStateToProps = (state) => {
   return {
+    visibleAnecdotes: anecdotesToShow(state.anecdotes, state.filter),
     anecdotes: state.anecdotes,
     filter: state.filter
   }
