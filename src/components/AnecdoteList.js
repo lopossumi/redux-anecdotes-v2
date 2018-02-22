@@ -1,29 +1,18 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Filter from './Filter'
 import { voting } from './../reducers/anecdoteReducer'
 import { notify, clear } from './../reducers/notificationReducer'
+import { connect } from 'react-redux'
 
 class AnecdoteList extends React.Component {
-  componentDidMount() {
-    const { store } = this.context
-    this.unsubscribe = store.subscribe(() =>
-      this.forceUpdate()
-    )
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe()
-  }
 
   render() {
-    const store = this.context.store
-    const anecdotes = store.getState().anecdotes
+    const anecdotes = this.props.anecdotes
     return (
       <div>
         <h2>Anecdotes</h2>
-        <Filter store={this.context.store} />
-        {anecdotes.sort((a, b) => b.votes - a.votes).map(anecdote => anecdote.content.includes(store.getState().filter)
+        <Filter />
+        {anecdotes.sort((a, b) => b.votes - a.votes).map(anecdote => anecdote.content.includes(this.props.filter)
           // Filter string exists in content: show anecdote
           ? <div key={anecdote.id}>
             <div>
@@ -32,9 +21,9 @@ class AnecdoteList extends React.Component {
             <div>
               has {anecdote.votes}
               <button onClick={() => {
-                store.dispatch(voting(anecdote.id))
-                store.dispatch(notify(`you voted '${anecdote.content}.'`))
-                setTimeout(() => { store.dispatch(clear()) }, 5000)
+                this.props.voting(anecdote.id)
+                this.props.notify(`you voted '${anecdote.content}.'`)
+                setTimeout(() => { this.props.clear() }, 5000)
               }}>
                 vote
               </button>
@@ -48,8 +37,16 @@ class AnecdoteList extends React.Component {
   }
 }
 
-AnecdoteList.contextTypes = {
-  store: PropTypes.object
+const mapStateToProps = (state) => {
+  return {
+    anecdotes: state.anecdotes,
+    filter: state.filter
+  }
 }
 
-export default AnecdoteList
+const ConnectedAnecdoteList = connect(
+  mapStateToProps,
+  { voting, notify, clear }
+)(AnecdoteList)
+
+export default ConnectedAnecdoteList
