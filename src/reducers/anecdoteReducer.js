@@ -1,4 +1,4 @@
-const getId = () => (100000 * Math.random()).toFixed(0)
+//const getId = () => (100000 * Math.random()).toFixed(0)
 
 // const asObject = (anecdote) => {
 //   return {
@@ -16,7 +16,7 @@ const anecdoteReducer = (store = [], action) => {
     return [...old, { ...voted, votes: voted.votes + 1 }]
   }
   if (action.type === 'CREATE') {
-    return [...store, { content: action.content, id: getId(), votes: 0 }]
+    return [...store, action.content]//: action.content, id: getId(), votes: 0 }]
   }
   if (action.type === 'INIT') {
     return action.data
