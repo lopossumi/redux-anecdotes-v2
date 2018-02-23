@@ -9,16 +9,19 @@ const notificationReducer = (state = '', action) => {
   }
 }
 
-export const notify = (message) => {
-  return {
-    type: 'SET_NOTIFICATION',
-    message
-  }
-}
-
-export const clear = () => {
-  return {
-    type: 'CLEAR_NOTIFICATION'
+export const notify = (message, timeSeconds) => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      message
+    })
+    setTimeout(() => {
+      dispatch({
+        type: 'CLEAR_NOTIFICATION'
+      })
+    },
+    timeSeconds*1000
+    )
   }
 }
 

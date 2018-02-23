@@ -1,12 +1,3 @@
-//const getId = () => (100000 * Math.random()).toFixed(0)
-
-// const asObject = (anecdote) => {
-//   return {
-//     content: anecdote,
-//     id: getId(),
-//     votes: 0
-//   }
-// }
 import anecdoteService from '../services/anecdotes'
 
 const anecdoteReducer = (store = [], action) => {
@@ -17,7 +8,7 @@ const anecdoteReducer = (store = [], action) => {
     return [...old, { ...voted, votes: voted.votes + 1 }]
   }
   if (action.type === 'CREATE') {
-    return [...store, action.content]//: action.content, id: getId(), votes: 0 }]
+    return [...store, action.content]
   }
   if (action.type === 'INIT') {
     return action.data
@@ -36,16 +27,26 @@ export const initialize = () => {
 }
 
 export const anecdoteCreation = (content) => {
-  return {
-    type: 'CREATE',
-    content
+  return async (dispatch) => {
+    const newAnecdote = await anecdoteService.createNew(content)
+    dispatch({
+      type: 'CREATE',
+      content: newAnecdote
+    })
   }
 }
 
-export const voting = (id) => {
-  return {
-    type: 'VOTE',
-    id
+export const voting = (anecdote) => {
+  return async (dispatch) => {
+    const voted = await anecdoteService
+      .update(
+        anecdote.id,
+        { ...anecdote, votes: anecdote.votes + 1 }
+      )
+    dispatch({
+      type: 'VOTE',
+      id: voted.id
+    })
   }
 }
 

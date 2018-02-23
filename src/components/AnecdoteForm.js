@@ -1,8 +1,7 @@
 import React from 'react'
 import { anecdoteCreation } from './../reducers/anecdoteReducer'
-import { notify, clear } from './../reducers/notificationReducer'
+import { notify } from './../reducers/notificationReducer'
 import { connect } from 'react-redux'
-import anecdoteService from '../services/anecdotes'
 
 class AnecdoteForm extends React.Component {
 
@@ -11,10 +10,8 @@ class AnecdoteForm extends React.Component {
     const content = e.target.anecdote.value
     if (content) {
       e.target.anecdote.value = ''
-      const newAnecdote = await anecdoteService.createNew(content)
-      this.props.anecdoteCreation(newAnecdote)
-      this.props.notify(`new anecdote created: '${content}'`)
-      setTimeout(() => { this.props.clear() }, 5000)
+      this.props.anecdoteCreation(content)
+      this.props.notify(`new anecdote created: '${content}'`, 5)
     }
   }
 
@@ -33,7 +30,7 @@ class AnecdoteForm extends React.Component {
 
 const ConnectedAnecdoteForm = connect(
   null,
-  { anecdoteCreation, notify, clear }
+  { anecdoteCreation, notify }
 )(AnecdoteForm)
 
 export default ConnectedAnecdoteForm
