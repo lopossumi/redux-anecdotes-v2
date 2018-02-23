@@ -5,12 +5,10 @@ import AnecdoteList from './components/AnecdoteList'
 
 import { connect } from 'react-redux'
 import { initialize } from './reducers/anecdoteReducer'
-import anecdoteService from './services/anecdotes'
 
 class App extends React.Component {
   componentDidMount = async () => {
-    const notes = await anecdoteService.getAll()
-    this.props.initialize(notes)
+    this.props.initialize()
   }
 
   render() {
@@ -29,5 +27,3 @@ export default connect(
   null,
   { initialize }
 )(App)
-
-//export default App
